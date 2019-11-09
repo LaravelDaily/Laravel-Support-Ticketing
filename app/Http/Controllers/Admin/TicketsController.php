@@ -14,16 +14,68 @@ use App\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Yajra\DataTables\Facades\DataTables;
 
 class TicketsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        abort_if(Gate::denies('ticket_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if ($request->ajax()) {
+            $query = Ticket::with(['status', 'priority', 'category', 'assigned_to_user'])->select(sprintf('%s.*', (new Ticket)->table));
+            $table = Datatables::of($query);
 
-        $tickets = Ticket::all();
+            $table->addColumn('placeholder', '&nbsp;');
+            $table->addColumn('actions', '&nbsp;');
 
-        return view('admin.tickets.index', compact('tickets'));
+            $table->editColumn('actions', function ($row) {
+                $viewGate      = 'ticket_show';
+                $editGate      = 'ticket_edit';
+                $deleteGate    = 'ticket_delete';
+                $crudRoutePart = 'tickets';
+
+                return view('partials.datatablesActions', compact(
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
+            });
+
+            $table->editColumn('id', function ($row) {
+                return $row->id ? $row->id : "";
+            });
+            $table->editColumn('title', function ($row) {
+                return $row->title ? $row->title : "";
+            });
+            $table->addColumn('status_name', function ($row) {
+                return $row->status ? $row->status->name : '';
+            });
+
+            $table->addColumn('priority_name', function ($row) {
+                return $row->priority ? $row->priority->name : '';
+            });
+
+            $table->addColumn('category_name', function ($row) {
+                return $row->category ? $row->category->name : '';
+            });
+
+            $table->editColumn('author_name', function ($row) {
+                return $row->author_name ? $row->author_name : "";
+            });
+            $table->editColumn('author_email', function ($row) {
+                return $row->author_email ? $row->author_email : "";
+            });
+            $table->addColumn('assigned_to_user_name', function ($row) {
+                return $row->assigned_to_user ? $row->assigned_to_user->name : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'status', 'priority', 'category', 'assigned_to_user']);
+
+            return $table->make(true);
+        }
+
+        return view('admin.tickets.index');
     }
 
     public function create()

@@ -2,14 +2,20 @@
 
 namespace App;
 
+use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Auditable;
 
     public $table = 'tickets';
+
+    public static $searchable = [
+        'title',
+        'content',
+    ];
 
     protected $dates = [
         'created_at',
@@ -30,6 +36,13 @@ class Ticket extends Model
         'author_email',
         'assigned_to_user_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        Ticket::observe(new \App\Observers\TicketActionObserver);
+    }
 
     public function comments()
     {
