@@ -52,6 +52,56 @@
                     </ul>
                 </li>
             @endcan
+            @can('status_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.statuses.index") }}" class="nav-link {{ request()->is('admin/statuses') || request()->is('admin/statuses/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-cogs nav-icon">
+
+                        </i>
+                        {{ trans('cruds.status.title') }}
+                    </a>
+                </li>
+            @endcan
+            @can('priority_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.priorities.index") }}" class="nav-link {{ request()->is('admin/priorities') || request()->is('admin/priorities/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-cogs nav-icon">
+
+                        </i>
+                        {{ trans('cruds.priority.title') }}
+                    </a>
+                </li>
+            @endcan
+            @can('category_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.categories.index") }}" class="nav-link {{ request()->is('admin/categories') || request()->is('admin/categories/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-tags nav-icon">
+
+                        </i>
+                        {{ trans('cruds.category.title') }}
+                    </a>
+                </li>
+            @endcan
+            @can('ticket_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.tickets.index") }}" class="nav-link {{ request()->is('admin/tickets') || request()->is('admin/tickets/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-question-circle nav-icon">
+
+                        </i>
+                        {{ trans('cruds.ticket.title') }}
+                    </a>
+                </li>
+            @endcan
+            @can('comment_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.comments.index") }}" class="nav-link {{ request()->is('admin/comments') || request()->is('admin/comments/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-comment nav-icon">
+
+                        </i>
+                        {{ trans('cruds.comment.title') }}
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                     <i class="nav-icon fas fa-fw fa-sign-out-alt">

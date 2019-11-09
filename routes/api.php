@@ -9,4 +9,19 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Users
     Route::apiResource('users', 'UsersApiController');
+
+    // Statuses
+    Route::apiResource('statuses', 'StatusesApiController');
+
+    // Priorities
+    Route::apiResource('priorities', 'PrioritiesApiController');
+
+    // Categories
+    Route::apiResource('categories', 'CategoriesApiController');
+
+    // Tickets
+    Route::apiResource('tickets', 'TicketsApiController');
+
+    // Comments
+    Route::apiResource('comments', 'CommentsApiController');
 });

@@ -24,4 +24,24 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     // Users
     Route::delete('users/destroy', 'UsersController@massDestroy')->name('users.massDestroy');
     Route::resource('users', 'UsersController');
+
+    // Statuses
+    Route::delete('statuses/destroy', 'StatusesController@massDestroy')->name('statuses.massDestroy');
+    Route::resource('statuses', 'StatusesController');
+
+    // Priorities
+    Route::delete('priorities/destroy', 'PrioritiesController@massDestroy')->name('priorities.massDestroy');
+    Route::resource('priorities', 'PrioritiesController');
+
+    // Categories
+    Route::delete('categories/destroy', 'CategoriesController@massDestroy')->name('categories.massDestroy');
+    Route::resource('categories', 'CategoriesController');
+
+    // Tickets
+    Route::delete('tickets/destroy', 'TicketsController@massDestroy')->name('tickets.massDestroy');
+    Route::resource('tickets', 'TicketsController');
+
+    // Comments
+    Route::delete('comments/destroy', 'CommentsController@massDestroy')->name('comments.massDestroy');
+    Route::resource('comments', 'CommentsController');
 });
