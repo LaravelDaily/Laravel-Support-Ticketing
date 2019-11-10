@@ -13,11 +13,6 @@ class Ticket extends Model
 
     public $table = 'tickets';
 
-    public static $searchable = [
-        'title',
-        'content',
-    ];
-
     protected $dates = [
         'created_at',
         'updated_at',
