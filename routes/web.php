@@ -2,11 +2,12 @@
 
 Route::redirect('/', '/login');
 Route::get('/home', function () {
+    $route = Gate::denies('dashboard_access') ? 'admin.tickets.index' : 'admin.home';
     if (session('status')) {
-        return redirect()->route('admin.home')->with('status', session('status'));
+        return redirect()->route($route)->with('status', session('status'));
     }
 
-    return redirect()->route('admin.home');
+    return redirect()->route($route);
 });
 
 Auth::routes(['register' => false]);
