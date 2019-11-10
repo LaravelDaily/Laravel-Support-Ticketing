@@ -97,19 +97,21 @@
                     {{ trans('cruds.ticket.fields.author_email_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('assigned_to_user_id') ? 'has-error' : '' }}">
-                <label for="assigned_to_user">{{ trans('cruds.ticket.fields.assigned_to_user') }}</label>
-                <select name="assigned_to_user_id" id="assigned_to_user" class="form-control select2">
-                    @foreach($assigned_to_users as $id => $assigned_to_user)
-                        <option value="{{ $id }}" {{ (isset($ticket) && $ticket->assigned_to_user ? $ticket->assigned_to_user->id : old('assigned_to_user_id')) == $id ? 'selected' : '' }}>{{ $assigned_to_user }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('assigned_to_user_id'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('assigned_to_user_id') }}
-                    </em>
-                @endif
-            </div>
+            @if(auth()->user()->isAdmin())
+                <div class="form-group {{ $errors->has('assigned_to_user_id') ? 'has-error' : '' }}">
+                    <label for="assigned_to_user">{{ trans('cruds.ticket.fields.assigned_to_user') }}</label>
+                    <select name="assigned_to_user_id" id="assigned_to_user" class="form-control select2">
+                        @foreach($assigned_to_users as $id => $assigned_to_user)
+                            <option value="{{ $id }}" {{ (isset($ticket) && $ticket->assigned_to_user ? $ticket->assigned_to_user->id : old('assigned_to_user_id')) == $id ? 'selected' : '' }}>{{ $assigned_to_user }}</option>
+                        @endforeach
+                    </select>
+                    @if($errors->has('assigned_to_user_id'))
+                        <em class="invalid-feedback">
+                            {{ $errors->first('assigned_to_user_id') }}
+                        </em>
+                    @endif
+                </div>
+            @endif
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>

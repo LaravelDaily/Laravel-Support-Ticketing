@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\Auditable;
+use App\Scopes\AgentScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -42,6 +43,8 @@ class Ticket extends Model
         parent::boot();
 
         Ticket::observe(new \App\Observers\TicketActionObserver);
+
+        static::addGlobalScope(new AgentScope);
     }
 
     public function comments()
