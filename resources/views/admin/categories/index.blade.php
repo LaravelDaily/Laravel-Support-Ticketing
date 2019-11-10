@@ -48,9 +48,7 @@
                             <td>
                                 {{ $category->name ?? '' }}
                             </td>
-                            <td>
-                                {{ $category->color ?? '' }}
-                            </td>
+                            <td style="background-color:{{ $category->color ?? '#FFFFFF' }}"></td>
                             <td>
                                 @can('category_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.categories.show', $category->id) }}">

@@ -48,9 +48,7 @@
                             <td>
                                 {{ $status->name ?? '' }}
                             </td>
-                            <td>
-                                {{ $status->color ?? '' }}
-                            </td>
+                            <td style="background-color:{{ $status->color ?? '#FFFFFF' }}"></td>
                             <td>
                                 @can('status_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.statuses.show', $status->id) }}">

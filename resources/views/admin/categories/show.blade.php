@@ -30,9 +30,7 @@
                         <th>
                             {{ trans('cruds.category.fields.color') }}
                         </th>
-                        <td>
-                            {{ $category->color }}
-                        </td>
+                        <td style="background-color:{{ $category->color ?? '#FFFFFF' }}"></td>
                     </tr>
                 </tbody>
             </table>

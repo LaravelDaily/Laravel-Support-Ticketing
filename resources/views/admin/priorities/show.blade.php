@@ -30,9 +30,7 @@
                         <th>
                             {{ trans('cruds.priority.fields.color') }}
                         </th>
-                        <td>
-                            {{ $priority->color }}
-                        </td>
+                        <td style="background-color:{{ $priority->color ?? '#FFFFFF' }}"></td>
                     </tr>
                 </tbody>
             </table>

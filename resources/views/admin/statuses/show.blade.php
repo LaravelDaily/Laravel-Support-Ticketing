@@ -30,9 +30,7 @@
                         <th>
                             {{ trans('cruds.status.fields.color') }}
                         </th>
-                        <td>
-                            {{ $status->color }}
-                        </td>
+                        <td style="background-color:{{ $status->color ?? '#FFFFFF' }}"></td>
                     </tr>
                 </tbody>
             </table>

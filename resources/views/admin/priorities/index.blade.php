@@ -48,9 +48,7 @@
                             <td>
                                 {{ $priority->name ?? '' }}
                             </td>
-                            <td>
-                                {{ $priority->color ?? '' }}
-                            </td>
+                            <td style="background-color:{{ $priority->color ?? '#FFFFFF' }}"></td>
                             <td>
                                 @can('priority_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.priorities.show', $priority->id) }}">
