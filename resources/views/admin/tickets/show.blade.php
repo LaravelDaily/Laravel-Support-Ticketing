@@ -36,6 +36,16 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.ticket.fields.attachments') }}
+                        </th>
+                        <td>
+                            @foreach($ticket->attachments as $attachment)
+                                <a href="{{ $attachment->getUrl() }}">{{ $attachment->file_name }}</a>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.ticket.fields.status') }}
                         </th>
                         <td>

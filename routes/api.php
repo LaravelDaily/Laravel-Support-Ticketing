@@ -20,6 +20,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('categories', 'CategoriesApiController');
 
     // Tickets
+    Route::post('tickets/media', 'TicketsApiController@storeMedia')->name('tickets.storeMedia');
     Route::apiResource('tickets', 'TicketsApiController');
 
     // Comments

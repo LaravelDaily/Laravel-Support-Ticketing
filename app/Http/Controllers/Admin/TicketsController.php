@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyTicketRequest;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
@@ -18,6 +19,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class TicketsController extends Controller
 {
+    use MediaUploadingTrait;
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -101,6 +104,10 @@ class TicketsController extends Controller
     {
         $ticket = Ticket::create($request->all());
 
+        foreach ($request->input('attachments', []) as $file) {
+            $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+        }
+
         return redirect()->route('admin.tickets.index');
     }
 
@@ -128,6 +135,22 @@ class TicketsController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
         $ticket->update($request->all());
+
+        if (count($ticket->attachments) > 0) {
+            foreach ($ticket->attachments as $media) {
+                if (!in_array($media->file_name, $request->input('attachments', []))) {
+                    $media->delete();
+                }
+            }
+        }
+
+        $media = $ticket->attachments->pluck('file_name')->toArray();
+
+        foreach ($request->input('attachments', []) as $file) {
+            if (count($media) === 0 || !in_array($file, $media)) {
+                $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
+            }
+        }
 
         return redirect()->route('admin.tickets.index');
     }

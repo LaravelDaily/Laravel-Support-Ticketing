@@ -3,15 +3,21 @@
 namespace App;
 
 use App\Traits\Auditable;
-use App\Scopes\AgentScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\Models\Media;
 
-class Ticket extends Model
+class Ticket extends Model implements HasMedia
 {
-    use SoftDeletes, Auditable;
+    use SoftDeletes, HasMediaTrait, Auditable;
 
     public $table = 'tickets';
+
+    protected $appends = [
+        'attachments',
+    ];
 
     protected $dates = [
         'created_at',
@@ -38,13 +44,21 @@ class Ticket extends Model
         parent::boot();
 
         Ticket::observe(new \App\Observers\TicketActionObserver);
+    }
 
-        static::addGlobalScope(new AgentScope);
+    public function registerMediaConversions(Media $media = null)
+    {
+        $this->addMediaConversion('thumb')->width(50)->height(50);
     }
 
     public function comments()
     {
         return $this->hasMany(Comment::class, 'ticket_id', 'id');
+    }
+
+    public function getAttachmentsAttribute()
+    {
+        return $this->getMedia('attachments');
     }
 
     public function status()
