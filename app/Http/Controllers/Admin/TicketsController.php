@@ -88,7 +88,11 @@ class TicketsController extends Controller
 
         $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $assigned_to_users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $assigned_to_users = User::whereHas('roles', function($query) {
+                $query->whereId(2);
+            })
+            ->pluck('name', 'id')
+            ->prepend(trans('global.pleaseSelect'), '');
 
         return view('admin.tickets.create', compact('statuses', 'priorities', 'categories', 'assigned_to_users'));
     }
@@ -110,7 +114,11 @@ class TicketsController extends Controller
 
         $categories = Category::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $assigned_to_users = User::all()->pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $assigned_to_users = User::whereHas('roles', function($query) {
+                $query->whereId(2);
+            })
+            ->pluck('name', 'id')
+            ->prepend(trans('global.pleaseSelect'), '');
 
         $ticket->load('status', 'priority', 'category', 'assigned_to_user');
 
