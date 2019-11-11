@@ -159,7 +159,7 @@ class TicketsController extends Controller
     {
         abort_if(Gate::denies('ticket_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $ticket->load('status', 'priority', 'category', 'assigned_to_user');
+        $ticket->load('status', 'priority', 'category', 'assigned_to_user', 'comments');
 
         return view('admin.tickets.show', compact('ticket'));
     }
@@ -178,5 +178,21 @@ class TicketsController extends Controller
         Ticket::whereIn('id', request('ids'))->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function storeComment(Request $request, Ticket $ticket)
+    {
+        $request->validate([
+            'comment_text' => 'required'
+        ]);
+        $user = auth()->user();
+        $ticket->comments()->create([
+            'author_name'   => $user->name,
+            'author_email'  => $user->email,
+            'user_id'       => $user->id,
+            'comment_text'  => $request->comment_text
+        ]);
+
+        return redirect()->back()->withStatus('Your comment added successfully');
     }
 }

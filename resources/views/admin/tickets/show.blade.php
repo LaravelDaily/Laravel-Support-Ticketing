@@ -7,6 +7,11 @@
     </div>
 
     <div class="card-body">
+        @if(session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
         <div class="mb-2">
             <table class="table table-bordered table-striped">
                 <tbody>
@@ -92,21 +97,50 @@
                             {{ $ticket->assigned_to_user->name ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.ticket.fields.comments') }}
+                        </th>
+                        <td>
+                            @forelse ($ticket->comments as $comment)
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="font-weight-bold"><a href="mailto:{{ $comment->author_email }}">{{ $comment->author_name }}</a> ({{ $comment->created_at }})</p>
+                                        <p>{{ $comment->comment_text }}</p>
+                                    </div>
+                                </div>
+                                @if(!$loop->last)
+                                    <hr />
+                                @endif
+                            @empty
+                                <div class="row">
+                                    <div class="col">
+                                        <p>There are no comments.</p>
+                                    </div>
+                                </div>
+                            @endforelse
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-            <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
-                {{ trans('global.back_to_list') }}
-            </a>
+            <form action="{{ route('admin.tickets.storeComment', $ticket->id) }}" method="POST">
+                @csrf
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Leave a comment</label>
+                    <textarea class="form-control" id="comment_text" name="comment_text" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
         </div>
+        <a class="btn btn-default my-2" href="{{ url()->previous() }}">
+            {{ trans('global.back_to_list') }}
+        </a>
 
         <nav class="mb-3">
             <div class="nav nav-tabs">
 
             </div>
         </nav>
-        <div class="tab-content">
-
-        </div>
     </div>
 </div>
 @endsection

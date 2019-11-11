@@ -141,6 +141,8 @@ return [
             'author_email_helper'     => '',
             'assigned_to_user'        => 'Assigned To User',
             'assigned_to_user_helper' => '',
+            'comments'                => 'Comments',
+            'comments_helper'         => '',
             'created_at'              => 'Created at',
             'created_at_helper'       => '',
             'updated_at'              => 'Updated at',
