@@ -101,7 +101,13 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
-{ data: 'title', name: 'title' },
+{
+    data: 'title',
+    name: 'title', 
+    render: function ( data, type, row) {
+        return '<a href="'+row.view_link+'">'+data+' ('+row.comments_count+')</a>';
+    }
+},
 { data: 'status_name', name: 'status.name' },
 { data: 'priority_name', name: 'priority.name' },
 { data: 'category_name', name: 'category.name' },

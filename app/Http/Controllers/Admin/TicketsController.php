@@ -24,7 +24,8 @@ class TicketsController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Ticket::with(['status', 'priority', 'category', 'assigned_to_user'])->select(sprintf('%s.*', (new Ticket)->table));
+            $query = Ticket::with(['status', 'priority', 'category', 'assigned_to_user', 'comments'])
+                ->select(sprintf('%s.*', (new Ticket)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -71,6 +72,14 @@ class TicketsController extends Controller
             });
             $table->addColumn('assigned_to_user_name', function ($row) {
                 return $row->assigned_to_user ? $row->assigned_to_user->name : '';
+            });
+
+            $table->addColumn('comments_count', function ($row) {
+                return $row->comments->count();
+            });
+
+            $table->addColumn('view_link', function ($row) {
+                return route('admin.tickets.show', $row->id);
             });
 
             $table->rawColumns(['actions', 'placeholder', 'status', 'priority', 'category', 'assigned_to_user']);
