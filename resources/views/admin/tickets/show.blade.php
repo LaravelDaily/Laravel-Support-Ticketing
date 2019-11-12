@@ -126,10 +126,10 @@
             <form action="{{ route('admin.tickets.storeComment', $ticket->id) }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Leave a comment</label>
-                    <textarea class="form-control" id="comment_text" name="comment_text" rows="3"></textarea>
+                    <label for="comment_text">Leave a comment</label>
+                    <textarea class="form-control" id="comment_text" name="comment_text" rows="3" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">@lang('global.submit')</button>
             </form>
         </div>
         <a class="btn btn-default my-2" href="{{ url()->previous() }}">

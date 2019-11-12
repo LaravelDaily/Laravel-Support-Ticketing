@@ -1,6 +1,5 @@
 <?php
-
-Route::redirect('/', '/login');
+Route::get('/', 'TicketController@create');
 Route::get('/home', function () {
     $route = Gate::denies('dashboard_access') ? 'admin.tickets.index' : 'admin.home';
     if (session('status')) {
@@ -11,6 +10,10 @@ Route::get('/home', function () {
 });
 
 Auth::routes(['register' => false]);
+
+Route::post('tickets/media', 'TicketController@storeMedia')->name('tickets.storeMedia');
+Route::post('tickets/comment/{ticket}', 'TicketController@storeComment')->name('tickets.storeComment');
+Route::resource('tickets', 'TicketController')->only(['show', 'create', 'store']);
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
