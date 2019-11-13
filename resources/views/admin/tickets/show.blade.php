@@ -132,7 +132,7 @@
                 <button type="submit" class="btn btn-primary">@lang('global.submit')</button>
             </form>
         </div>
-        <a class="btn btn-default my-2" href="{{ url()->previous() }}">
+        <a class="btn btn-default my-2" href="{{ route('admin.tickets.index') }}">
             {{ trans('global.back_to_list') }}
         </a>
 

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\AgentScope;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,6 +45,8 @@ class Ticket extends Model implements HasMedia
         parent::boot();
 
         Ticket::observe(new \App\Observers\TicketActionObserver);
+
+        static::addGlobalScope(new AgentScope);
     }
 
     public function registerMediaConversions(Media $media = null)
