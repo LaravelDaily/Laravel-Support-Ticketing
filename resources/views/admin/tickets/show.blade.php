@@ -25,6 +25,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.ticket.fields.created_at') }}
+                        </th>
+                        <td>
+                            {{ $ticket->created_at }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.ticket.fields.title') }}
                         </th>
                         <td>
@@ -45,7 +53,7 @@
                         </th>
                         <td>
                             @foreach($ticket->attachments as $attachment)
-                                <a href="{{ $attachment->getUrl() }}">{{ $attachment->file_name }}</a>
+                                <a href="{{ $attachment->getUrl() }}" target="_blank">{{ $attachment->file_name }}</a>
                             @endforeach
                         </td>
                     </tr>
@@ -109,31 +117,34 @@
                                         <p>{{ $comment->comment_text }}</p>
                                     </div>
                                 </div>
-                                @if(!$loop->last)
-                                    <hr />
-                                @endif
+                                <hr />
                             @empty
                                 <div class="row">
                                     <div class="col">
                                         <p>There are no comments.</p>
                                     </div>
                                 </div>
+                                <hr />
                             @endforelse
+                            <form action="{{ route('admin.tickets.storeComment', $ticket->id) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="comment_text">Leave a comment</label>
+                                    <textarea class="form-control" id="comment_text" name="comment_text" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">@lang('global.submit')</button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <form action="{{ route('admin.tickets.storeComment', $ticket->id) }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="comment_text">Leave a comment</label>
-                    <textarea class="form-control" id="comment_text" name="comment_text" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">@lang('global.submit')</button>
-            </form>
         </div>
         <a class="btn btn-default my-2" href="{{ route('admin.tickets.index') }}">
             {{ trans('global.back_to_list') }}
+        </a>
+
+        <a href="{{ route('admin.tickets.edit', $ticket->id) }}" class="btn btn-primary">
+            @lang('global.edit') @lang('cruds.ticket.title_singular')
         </a>
 
         <nav class="mb-3">
