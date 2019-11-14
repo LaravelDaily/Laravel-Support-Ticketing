@@ -25,6 +25,7 @@ class TicketsController extends Controller
     {
         if ($request->ajax()) {
             $query = Ticket::with(['status', 'priority', 'category', 'assigned_to_user', 'comments'])
+                ->filterTickets($request)
                 ->select(sprintf('%s.*', (new Ticket)->table));
             $table = Datatables::of($query);
 
@@ -55,13 +56,22 @@ class TicketsController extends Controller
             $table->addColumn('status_name', function ($row) {
                 return $row->status ? $row->status->name : '';
             });
+            $table->addColumn('status_color', function ($row) {
+                return $row->status ? $row->status->color : '#000000';
+            });
 
             $table->addColumn('priority_name', function ($row) {
                 return $row->priority ? $row->priority->name : '';
             });
+            $table->addColumn('priority_color', function ($row) {
+                return $row->priority ? $row->priority->color : '#000000';
+            });
 
             $table->addColumn('category_name', function ($row) {
                 return $row->category ? $row->category->name : '';
+            });
+            $table->addColumn('category_color', function ($row) {
+                return $row->category ? $row->category->color : '#000000';
             });
 
             $table->editColumn('author_name', function ($row) {
@@ -87,7 +97,11 @@ class TicketsController extends Controller
             return $table->make(true);
         }
 
-        return view('admin.tickets.index');
+        $priorities = Priority::all();
+        $statuses = Status::all();
+        $categories = Category::all();
+
+        return view('admin.tickets.index', compact('priorities', 'statuses', 'categories'));
     }
 
     public function create()

@@ -60,7 +60,37 @@
 @parent
 <script>
     $(function () {
-  let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+let filters = `
+<form class="form-inline" id="filtersForm">
+  <div class="form-group mx-sm-3 mb-2">
+    <select class="form-control" name="status">
+      <option value="">All statuses</option>
+      @foreach($statuses as $status)
+        <option value="{{ $status->id }}"{{ request('status') == $status->id ? 'selected' : '' }}>{{ $status->name }}</option>
+      @endforeach
+    </select>
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <select class="form-control" name="priority">
+      <option value="">All priorities</option>
+      @foreach($priorities as $priority)
+        <option value="{{ $priority->id }}"{{ request('priority') == $priority->id ? 'selected' : '' }}>{{ $priority->name }}</option>
+      @endforeach
+    </select>
+  </div>
+  <div class="form-group mx-sm-3 mb-2">
+    <select class="form-control" name="category">
+      <option value="">All categories</option>
+      @foreach($categories as $category)
+        <option value="{{ $category->id }}"{{ request('category') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+      @endforeach
+    </select>
+  </div>
+</form>`;
+$('.card-body').on('change', 'select', function() {
+  $('#filtersForm').submit();
+})
+  let dtButtons = []
 @can('ticket_delete')
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
   let deleteButton = {
@@ -90,14 +120,21 @@
   }
   dtButtons.push(deleteButton)
 @endcan
-
+  let searchParams = new URLSearchParams(window.location.search)
   let dtOverrideGlobals = {
     buttons: dtButtons,
     processing: true,
     serverSide: true,
     retrieve: true,
     aaSorting: [],
-    ajax: "{{ route('admin.tickets.index') }}",
+    ajax: {
+      url: "{{ route('admin.tickets.index') }}",
+      data: {
+        'status': searchParams.get('status'),
+        'priority': searchParams.get('priority'),
+        'category': searchParams.get('category')
+      }
+    },
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
@@ -108,9 +145,27 @@
         return '<a href="'+row.view_link+'">'+data+' ('+row.comments_count+')</a>';
     }
 },
-{ data: 'status_name', name: 'status.name' },
-{ data: 'priority_name', name: 'priority.name' },
-{ data: 'category_name', name: 'category.name' },
+{ 
+  data: 'status_name', 
+  name: 'status.name', 
+  render: function ( data, type, row) {
+      return '<span style="color:'+row.status_color+'">'+data+'</span>';
+  }
+},
+{ 
+  data: 'priority_name', 
+  name: 'priority.name', 
+  render: function ( data, type, row) {
+      return '<span style="color:'+row.priority_color+'">'+data+'</span>';
+  }
+},
+{ 
+  data: 'category_name', 
+  name: 'category.name', 
+  render: function ( data, type, row) {
+      return '<span style="color:'+row.category_color+'">'+data+'</span>';
+  } 
+},
 { data: 'author_name', name: 'author_name' },
 { data: 'author_email', name: 'author_email' },
 { data: 'assigned_to_user_name', name: 'assigned_to_user.name' },
@@ -118,7 +173,10 @@
     ],
     order: [[ 1, 'desc' ]],
     pageLength: 100,
-  };
+  };    
+$(".datatable-Ticket").one("preInit.dt", function () {
+ $(".dataTables_filter").after(filters);
+});
   $('.datatable-Ticket').DataTable(dtOverrideGlobals);
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e){
         $($.fn.dataTable.tables(true)).DataTable()

@@ -83,4 +83,23 @@ class Ticket extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'assigned_to_user_id');
     }
+
+    public function scopeFilterTickets($query)
+    {
+        $query->when(request()->input('priority'), function($query) {
+                $query->whereHas('priority', function($query) {
+                    $query->whereId(request()->input('priority'));
+                });
+            })
+            ->when(request()->input('category'), function($query) {
+                $query->whereHas('category', function($query) {
+                    $query->whereId(request()->input('category'));
+                });
+            })
+            ->when(request()->input('status'), function($query) {
+                $query->whereHas('status', function($query) {
+                    $query->whereId(request()->input('status'));
+                });
+            });
+    }
 }
