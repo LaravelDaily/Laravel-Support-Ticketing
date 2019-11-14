@@ -35,7 +35,7 @@ class DataChangeEmailNotification extends Notification
             ->greeting('Hi,')
             ->line($this->data['action'])
             ->line("Customer: ".$this->ticket->author_name) 
-            ->line("Ticket name: ".$this->ticket->name)
+            ->line("Ticket name: ".$this->ticket->title)
             ->line("Brief description: ".Str::limit($this->ticket->content, 200))
             ->action('View full ticket', route('admin.tickets.show', $this->ticket->id))
             ->line('Thank you')
