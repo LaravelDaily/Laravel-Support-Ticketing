@@ -10,7 +10,7 @@ class TicketActionObserver
 {
     public function created(Ticket $model)
     {
-        $data  = ['action' => 'created', 'model_name' => 'Ticket'];
+        $data  = ['action' => 'New ticket has been created!', 'model_name' => 'Ticket', 'ticket' => $model];
         $users = \App\User::whereHas('roles', function ($q) {
             return $q->where('title', 'Admin');
         })->get();
@@ -19,7 +19,7 @@ class TicketActionObserver
 
     public function updated(Ticket $model)
     {
-        $data  = ['action' => 'updated', 'model_name' => 'Ticket'];
+        $data  = ['action' => 'Ticket has been updated!', 'model_name' => 'Ticket', 'ticket' => $model];
         $users = \App\User::whereHas('roles', function ($q) {
             return $q->where('title', 'Admin');
         })->get();

@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Str;
 
 class DataChangeEmailNotification extends Notification
 {
@@ -14,6 +15,7 @@ class DataChangeEmailNotification extends Notification
     public function __construct($data)
     {
         $this->data = $data;
+        $this->ticket = $data['ticket'];
     }
 
     public function via($notifiable)
@@ -29,11 +31,13 @@ class DataChangeEmailNotification extends Notification
     public function getMessage()
     {
         return (new MailMessage)
-            ->subject(config('app.name') . ': entry ' . $this->data['action'] . ' in ' . $this->data['model_name'])
+            ->subject($this->data['action'])
             ->greeting('Hi,')
-            ->line('we would like to inform you that entry has been ' . $this->data['action'] . ' in ' . $this->data['model_name'])
-            ->line('Please log in to see more information.')
-            ->action(config('app.name'), config('app.url'))
+            ->line($this->data['action'])
+            ->line("Customer: ".$this->ticket->author_name) 
+            ->line("Ticket name: ".$this->ticket->name)
+            ->line("Brief description: ".Str::limit($this->ticket->content, 200))
+            ->action('View full ticket', route('admin.tickets.show', $this->ticket->id))
             ->line('Thank you')
             ->line(config('app.name') . ' Team')
             ->salutation(' ');
