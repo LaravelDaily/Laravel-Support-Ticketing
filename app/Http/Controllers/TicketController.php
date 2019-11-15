@@ -72,32 +72,13 @@ class TicketController extends Controller
         ]);
         $user = auth()->user();
         $comment = $ticket->comments()->create([
-            'author_name'   => $ticket->author_name,
-            'author_email'  => $ticket->author_email,
-            'comment_text'  => $request->comment_text
+            'author_name'   => $user->name ?? $ticket->author_name,
+            'author_email'  => $user->email ?? $ticket->author_email,
+            'comment_text'  => $request->comment_text,
+            'user_id'       => $user->id ?? null,
         ]);
 
-        $users = \App\User::where(function ($q) use ($ticket) {
-                $q->whereHas('roles', function ($q) {
-                    return $q->where('title', 'Agent');
-                })
-                ->where(function ($q) use ($ticket) {
-                    $q->whereHas('comments', function ($q) use ($ticket) {
-                        return $q->whereTicketId($ticket->id);
-                    })
-                    ->orWhereHas('tickets', function ($q) use ($ticket) {
-                        return $q->whereId($ticket->id);
-                    }); 
-                });
-            })
-            ->when(!$ticket->assigned_to_user_id, function ($q) {
-                $q->orWhereHas('roles', function ($q) {
-                    return $q->where('title', 'Admin');
-                });
-            })
-            ->get();
-
-        Notification::send($users, new CommentEmailNotification($comment, route('tickets.show', $ticket->id)));
+        $ticket->sendCommentNotification($comment);
 
         return redirect()->back()->withStatus('Your comment added successfully');
     }

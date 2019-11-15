@@ -17,10 +17,9 @@ class CommentEmailNotification extends Notification
      *
      * @return void
      */
-    public function __construct($comment, $route)
+    public function __construct($comment)
     {
         $this->comment = $comment;
-        $this->route = $route;
     }
 
     /**
@@ -48,7 +47,7 @@ class CommentEmailNotification extends Notification
                     ->line('New comment on ticket '.$this->comment->ticket->title.':')
                     ->line('')
                     ->line(Str::limit($this->comment->comment_text, 500))
-                    ->action('View full ticket', url($this->route))
+                    ->action('View full ticket', route(optional($notifiable)->id ? 'admin.tickets.show' : 'tickets.show', $this->comment->ticket->id))
                     ->line('Thank you')
                     ->line(config('app.name') . ' Team')
                     ->salutation(' ');
