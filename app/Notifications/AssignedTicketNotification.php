@@ -6,9 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Str;
 
-class CommentEmailNotification extends Notification
+class AssignedTicketNotification extends Notification
 {
     use Queueable;
 
@@ -17,10 +16,9 @@ class CommentEmailNotification extends Notification
      *
      * @return void
      */
-    public function __construct($comment, $route)
+    public function __construct($ticket)
     {
-        $this->comment = $comment;
-        $this->route = $route;
+        $this->ticket = $ticket;
     }
 
     /**
@@ -43,12 +41,10 @@ class CommentEmailNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('New comment on ticket '.$this->comment->ticket->title)
+                    ->subject('You have been assigned a new ticket')
                     ->greeting('Hi,')
-                    ->line('New comment on ticket '.$this->comment->ticket->title.':')
-                    ->line('')
-                    ->line(Str::limit($this->comment->comment_text, 500))
-                    ->action('View full ticket', url($this->route))
+                    ->line('You have been assigned a new ticket: '.$this->ticket->title)
+                    ->action('View ticket', route('admin.tickets.show', $this->ticket->id))
                     ->line('Thank you')
                     ->line(config('app.name') . ' Team')
                     ->salutation(' ');
