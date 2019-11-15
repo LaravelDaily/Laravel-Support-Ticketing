@@ -70,12 +70,11 @@ class TicketController extends Controller
         $request->validate([
             'comment_text' => 'required'
         ]);
-        $user = auth()->user();
+
         $comment = $ticket->comments()->create([
-            'author_name'   => $user->name ?? $ticket->author_name,
-            'author_email'  => $user->email ?? $ticket->author_email,
-            'comment_text'  => $request->comment_text,
-            'user_id'       => $user->id ?? null,
+            'author_name'   => $ticket->author_name,
+            'author_email'  => $ticket->author_email,
+            'comment_text'  => $request->comment_text
         ]);
 
         $ticket->sendCommentNotification($comment);
