@@ -4,21 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Ticket;
 use App\Http\Controllers\Traits\MediaUploadingTrait;
+use App\Notifications\CommentEmailNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
     use MediaUploadingTrait;
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Show the form for creating a new resource.
@@ -79,11 +71,33 @@ class TicketController extends Controller
             'comment_text' => 'required'
         ]);
         $user = auth()->user();
-        $ticket->comments()->create([
+        $comment = $ticket->comments()->create([
             'author_name'   => $ticket->author_name,
             'author_email'  => $ticket->author_email,
             'comment_text'  => $request->comment_text
         ]);
+
+        $users = \App\User::where(function ($q) use ($ticket) {
+                $q->whereHas('roles', function ($q) {
+                    return $q->where('title', 'Agent');
+                })
+                ->where(function ($q) use ($ticket) {
+                    $q->whereHas('comments', function ($q) use ($ticket) {
+                        return $q->whereTicketId($ticket->id);
+                    })
+                    ->orWhereHas('tickets', function ($q) use ($ticket) {
+                        return $q->whereId($ticket->id);
+                    }); 
+                });
+            })
+            ->when(!$ticket->assigned_to_user_id, function ($q) {
+                $q->orWhereHas('roles', function ($q) {
+                    return $q->where('title', 'Admin');
+                });
+            })
+            ->get();
+
+        Notification::send($users, new CommentEmailNotification($comment, route('tickets.show', $ticket->id)));
 
         return redirect()->back()->withStatus('Your comment added successfully');
     }

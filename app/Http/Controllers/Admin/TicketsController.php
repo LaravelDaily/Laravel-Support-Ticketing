@@ -8,6 +8,8 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyTicketRequest;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Notifications\CommentEmailNotification;
+use Illuminate\Support\Facades\Notification;
 use App\Priority;
 use App\Status;
 use App\Ticket;
@@ -209,12 +211,30 @@ class TicketsController extends Controller
             'comment_text' => 'required'
         ]);
         $user = auth()->user();
-        $ticket->comments()->create([
+        $comment = $ticket->comments()->create([
             'author_name'   => $user->name,
             'author_email'  => $user->email,
             'user_id'       => $user->id,
             'comment_text'  => $request->comment_text
         ]);
+
+        $users = \App\User::whereHas('roles', function ($q) {
+                return $q->where('title', 'Agent');
+            })
+            ->where(function ($q) use ($ticket) {
+                $q->whereHas('comments', function ($q) use ($ticket) {
+                    return $q->whereTicketId($ticket->id);
+                })
+                ->orWhereHas('tickets', function ($q) use ($ticket) {
+                    return $q->whereId($ticket->id);
+                }); 
+            })
+            ->get();
+        $notification = new CommentEmailNotification($comment, route('admin.tickets.show', $ticket->id));
+
+        Notification::send($users, $notification);
+        if($ticket->author_email)
+            Notification::route('mail', $ticket->author_email)->notify($notification);
 
         return redirect()->back()->withStatus('Your comment added successfully');
     }
