@@ -1,4 +1,7 @@
 <?php
+
+Route::get('/telegram', 'TelegramNotificationController@toTelegram');
+
 Route::get('/', 'TicketController@create');
 Route::get('/allticket', 'TicketController@index');
 Route::get('/home', function () {

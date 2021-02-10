@@ -8,6 +8,8 @@ use App\Notifications\CommentEmailNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Http\Request;
 
+use App\Notifications\TicketTelegram;
+
 class TicketController extends Controller
 {
     use MediaUploadingTrait;
@@ -50,12 +52,15 @@ class TicketController extends Controller
             'priority_id'   => 1
         ]);
 
-        $ticket = Ticket::create($request->all());
+        // $ticket = new Ticket;
+        // $ticket->notify(new TicketTelegram());
 
+        $ticket = Ticket::create($request->all());
         foreach ($request->input('attachments', []) as $file) {
             $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
         }
-
+        $newTicket = Ticket::find($ticket->id);
+        $newTicket->notify(new TicketTelegram());
         return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="'.route('tickets.show', $ticket->id).'">here</a>');
     }
 
