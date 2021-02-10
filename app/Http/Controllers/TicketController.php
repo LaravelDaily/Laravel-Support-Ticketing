@@ -17,6 +17,13 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index()
+    {
+        $allTicket = Ticket::all();
+
+        dd($allTicket);
+    }
+
     public function create()
     {
         return view('tickets.create');
