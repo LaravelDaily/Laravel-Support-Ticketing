@@ -59,8 +59,10 @@ class TicketController extends Controller
         foreach ($request->input('attachments', []) as $file) {
             $ticket->addMedia(storage_path('tmp/uploads/' . $file))->toMediaCollection('attachments');
         }
+        //send notification to telegram
         $newTicket = Ticket::find($ticket->id);
         $newTicket->notify(new TicketTelegram());
+        
         return redirect()->back()->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status <a href="'.route('tickets.show', $ticket->id).'">here</a>');
     }
 

@@ -36,21 +36,24 @@ class TicketTelegram extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('google.com');
+        // dd($notifiable);
+        // dd($this);
+        $url = ('localhost:8000/admin/tickets/'. $notifiable->id);
+        // dd($url);
 
         return TelegramMessage::create()
             // Optional recipient user id.
             // ->to($notifiable->telegram_user_id)
             ->to('-1001437354884')
             // Markdown supported.
-            ->content("Hello there!\nYour invoice has been *PAID*");
+            ->content("Hello there!\nYour invoice has been *PAID*". $url)
             
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
             
             // // (Optional) Inline Buttons
-            // ->button('View Invoice', $url)
-            // ->button('Download Invoice', $url);
+            ->button('View Ticket', $url)
+            ->button('Download Invoice', $url);
     }
 
     /**
