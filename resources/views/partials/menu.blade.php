@@ -114,6 +114,16 @@
                     </a>
                 </li>
             @endcan
+            @can('peminjaman_access')
+                <li class="nav-item">
+                    <a href="{{ route("admin.peminjaman.index") }}" class="nav-link {{ request()->is('admin/peminjaman') || request()->is('admin/peminjaman/*') ? 'active' : '' }}">
+                        <i class="fa-fw fas fa-comment nav-icon">
+
+                        </i>
+                        {{ trans('Peminjaman') }}
+                    </a>
+                </li>
+            @endcan
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                     <i class="nav-icon fas fa-fw fa-sign-out-alt">
