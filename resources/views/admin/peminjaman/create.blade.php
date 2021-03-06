@@ -25,20 +25,8 @@
                     {{ trans('cruds.comment.fields.author_name_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
-                <label for="title">{{ trans('Title') }}*</label>
-                <input type="text" id="title" name="title" class="form-control" value="{{ old('title', isset($peminjaman) ? $peminjaman->title : '') }}" required>
-                @if($errors->has('title'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('title') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.comment.fields.author_name_helper') }}
-                </p>
-            </div>
             <div class="form-group {{ $errors->has('author_name') ? 'has-error' : '' }}">
-                <label for="name">{{ trans('Name') }}*</label>
+                <label for="name">{{ trans('Nama Peminjam') }}*</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($peminjaman) ? $peminjaman->name : '') }}" required>
                 @if($errors->has('name'))
                     <em class="invalid-feedback">
@@ -75,7 +63,7 @@
             </div>
             <div class="form-group {{ $errors->has('tanggal_kembali') ? 'has-error' : '' }}">
                 <label for="tanggal_kembali">{{ trans('Tanggal Kembali') }}*</label>
-                <input type="date" id="tanggal_kembali" name="tanggal_kembali" class="form-control" value="{{ old('tanggal_kembali', isset($peminjaman) ? $peminjaman->tanggal_kembali : '') }}" required>
+                <input type="date" id="tanggal_kembali" name="tanggal_kembali" class="form-control" value="{{ old('tanggal_kembali', isset($peminjaman) ? $peminjaman->tanggal_kembali : '') }}">
                 @if($errors->has('tanggal_kembali'))
                     <em class="invalid-feedback">
                         {{ $errors->first('tanggal_kembali') }}
@@ -83,18 +71,6 @@
                 @endif
                 <p class="helper-block">
                     {{ trans('cruds.comment.fields.author_email_helper') }}
-                </p>
-            </div>
-            <div class="form-group {{ $errors->has('comment_text') ? 'has-error' : '' }}">
-                <label for="comment_text">{{ trans('cruds.comment.fields.comment_text') }}*</label>
-                <textarea id="comment_text" name="comment_text" class="form-control " required>{{ old('comment_text', isset($comment) ? $comment->comment_text : '') }}</textarea>
-                @if($errors->has('comment_text'))
-                    <em class="invalid-feedback">
-                        {{ $errors->first('comment_text') }}
-                    </em>
-                @endif
-                <p class="helper-block">
-                    {{ trans('cruds.comment.fields.comment_text_helper') }}
                 </p>
             </div>
             <div>

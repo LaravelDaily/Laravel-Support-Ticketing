@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePeminjamanRequest;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,14 +41,17 @@ class PeminjamanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePeminjamanRequest $request)
     {
         //
         $idUser = Auth::user()->id;
-        
-        $barang_pinjam = $request->barang_pinjam;
-        $hasil = implode(';',$barang_pinjam);
-        dd($hasil);
+
+        //validasi data
+        $validated = $request->all();
+
+        // $barang_pinjam = $request->barang_pinjam;
+        // $hasil = implode(';',$barang_pinjam);
+        dd($validated);
         return "mamang";
     }
 
