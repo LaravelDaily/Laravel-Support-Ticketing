@@ -43,8 +43,11 @@ class PeminjamanController extends Controller
     public function store(Request $request)
     {
         //
-        $all = $request->all();
-        dd($all);
+        $idUser = Auth::user()->id;
+        
+        $barang_pinjam = $request->barang_pinjam;
+        $hasil = implode(';',$barang_pinjam);
+        dd($hasil);
         return "mamang";
     }
 

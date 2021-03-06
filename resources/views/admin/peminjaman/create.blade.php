@@ -10,6 +10,21 @@
         <form action="{{ route("admin.peminjaman.store") }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            <div class="form-group barang {{ $errors->has('barang_pinjam') ? 'has-error' : '' }}">
+                <label for="barang_pinjam">{{ trans('Barang Yang Dipinjam') }}*</label>
+                <button class="add_form_field">Add &nbsp;
+                    <span style="font-size:16px; font-weight:bold;">+ </span>
+                </button>
+                <input type="text" id="barang_pinjam" name="barang_pinjam[]" class="form-control" value="{{ old('barang_pinjam', isset($peminjaman) ? $peminjaman->barang_pinjam : '') }}" required>
+                @if($errors->has('barang_pinjam'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('barang_pinjam') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.comment.fields.author_name_helper') }}
+                </p>
+            </div>
             <div class="form-group {{ $errors->has('title') ? 'has-error' : '' }}">
                 <label for="title">{{ trans('Title') }}*</label>
                 <input type="text" id="title" name="title" class="form-control" value="{{ old('title', isset($peminjaman) ? $peminjaman->title : '') }}" required>
@@ -23,23 +38,47 @@
                 </p>
             </div>
             <div class="form-group {{ $errors->has('author_name') ? 'has-error' : '' }}">
-                <label for="author_name">{{ trans('cruds.comment.fields.author_name') }}*</label>
-                <input type="text" id="author_name" name="author_name" class="form-control" value="{{ old('author_name', isset($comment) ? $comment->author_name : '') }}" required>
-                @if($errors->has('author_name'))
+                <label for="name">{{ trans('Name') }}*</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ old('name', isset($peminjaman) ? $peminjaman->name : '') }}" required>
+                @if($errors->has('name'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('author_name') }}
+                        {{ $errors->first('name') }}
                     </em>
                 @endif
                 <p class="helper-block">
                     {{ trans('cruds.comment.fields.author_name_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('author_email') ? 'has-error' : '' }}">
-                <label for="author_email">{{ trans('cruds.comment.fields.author_email') }}*</label>
-                <input type="text" id="author_email" name="author_email" class="form-control" value="{{ old('author_email', isset($comment) ? $comment->author_email : '') }}" required>
-                @if($errors->has('author_email'))
+            <div class="form-group {{ $errors->has('email') ? 'has-error' : '' }}">
+                <label for="email">{{ trans('Email Peminjam') }}*</label>
+                <input type="text" id="email" name="email" class="form-control" value="{{ old('email', isset($peminjaman) ? $peminjaman->email : '') }}" required>
+                @if($errors->has('email'))
                     <em class="invalid-feedback">
-                        {{ $errors->first('author_email') }}
+                        {{ $errors->first('email') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.comment.fields.author_email_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('tanggal_pinjam') ? 'has-error' : '' }}">
+                <label for="tanggal_pinjam">{{ trans('Tanggal Pinjam') }}*</label>
+                <input type="date" id="tanggal_pinjam" name="tanggal_pinjam" class="form-control" value="{{ old('tanggal_pinjam', isset($peminjaman) ? $peminjaman->tanggal_pinjam : '') }}" required>
+                @if($errors->has('tanggal_pinjam'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('tanggal_pinjam') }}
+                    </em>
+                @endif
+                <p class="helper-block">
+                    {{ trans('cruds.comment.fields.author_email_helper') }}
+                </p>
+            </div>
+            <div class="form-group {{ $errors->has('tanggal_kembali') ? 'has-error' : '' }}">
+                <label for="tanggal_kembali">{{ trans('Tanggal Kembali') }}*</label>
+                <input type="date" id="tanggal_kembali" name="tanggal_kembali" class="form-control" value="{{ old('tanggal_kembali', isset($peminjaman) ? $peminjaman->tanggal_kembali : '') }}" required>
+                @if($errors->has('tanggal_kembali'))
+                    <em class="invalid-feedback">
+                        {{ $errors->first('tanggal_kembali') }}
                     </em>
                 @endif
                 <p class="helper-block">
@@ -66,4 +105,37 @@
 
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var max_fields = 10;
+        var wrapper = $(".barang");
+        var add_button = $(".add_form_field");
+
+        var x = 1;
+        $(add_button).click(function(e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                $(wrapper).append('<div><input type="text" id="barang_pinjam" name="barang_pinjam[]" class="form-control"><a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You Reached the limits')
+            }
+        });
+
+        $(wrapper).on("click", ".delete", function(e) {
+            e.preventDefault();
+            $(this).parent('div').remove();
+            x--;
+        })
+    });
+
+    Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+    });
+
+    document.getElementById('tanggal_pinjam').value = new Date().toDateInputValue();
+</script>
 @endsection
