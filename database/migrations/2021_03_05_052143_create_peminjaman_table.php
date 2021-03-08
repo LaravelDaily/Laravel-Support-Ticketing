@@ -15,7 +15,6 @@ class CreatePeminjamanTable extends Migration
     {
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->string('nama');
             $table->string('email');
             $table->date('tanggal_pinjam');

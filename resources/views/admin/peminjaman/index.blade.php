@@ -19,26 +19,23 @@
             <table class=" table table-bordered table-striped table-hover datatable datatable-peminjaman">
                 <thead>
                     <tr>
-                        <th width="10">
-
+                        <th>
+                            Nama Peminjam
                         </th>
                         <th>
-                            ID
+                            Email Peminjam
                         </th>
                         <th>
-                            x
+                            Barang yang Dipinjam
                         </th>
                         <th>
-                            y
+                            Tanggal Peminjaman
                         </th>
                         <th>
-                            x
+                            Tanggal Kembali
                         </th>
                         <th>
-                            y
-                        </th>
-                        <th>
-                            x
+                            Admin
                         </th>
                         <th>
                             &nbsp;
@@ -46,35 +43,45 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                        <tr data-entry-id="">
+                    @foreach($peminjamans as $key => $peminjaman)
+                        <tr data-entry-id="{{ $peminjaman->id }}">
                             <td>
-
+                                {{ $peminjaman->nama ?? '' }}
                             </td>
                             <td>
-                                
+                                {{ $peminjaman->email ?? '' }}
                             </td>
                             <td>
-                                
+                                {{ $peminjaman->barang_pinjam ?? '' }}
                             </td>
                             <td>
-                                
+                                {{ $peminjaman->tanggal_pinjam ?? '' }}
                             </td>
                             <td>
-                                
+                                {{ $peminjaman->tanggal_kembali ?? '' }}
                             </td>
                             <td>
-                                
-                            </td>
-                            <td>
-                                
+                                {{ $peminjaman->user_id ?? '' }}
                             </td>
                             <td>
 
+                                @can('peminjaman_edit')
+                                    <a class="btn btn-xs btn-info" href="{{ route('admin.peminjaman.edit', $peminjaman->id) }}">
+                                        {{ trans('global.edit') }}
+                                    </a>
+                                @endcan
+
+                                @can('peminjaman_delete')
+                                    <form action="{{ route('admin.peminjaman.destroy', $peminjaman->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
+                                    </form>
+                                @endcan
                             </td>
 
                         </tr>
-                    
+                    @endforeach
                 </tbody>
             </table>
         </div>

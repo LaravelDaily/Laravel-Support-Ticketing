@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePeminjamanRequest;
 use App\User;
+use App\Peminjaman;
+use Gate;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class PeminjamanController extends Controller
 {
@@ -18,9 +21,11 @@ class PeminjamanController extends Controller
     public function index()
     {
         //
-        $id = Auth::user()->id;
-        // return $id;
-        return view ('admin.peminjaman.index');
+        abort_if(Gate::denies('peminjaman_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $peminjamans = Peminjaman::all();
+
+        return view('admin.peminjaman.index', compact('peminjamans'));
         // return "mamang";
     }
 
@@ -46,13 +51,27 @@ class PeminjamanController extends Controller
         //
         $idUser = Auth::user()->id;
 
-        //validasi data
-        $validated = $request->all();
+        // //validasi data
+        // $validated = $request->all();
 
-        // $barang_pinjam = $request->barang_pinjam;
-        // $hasil = implode(';',$barang_pinjam);
-        dd($validated);
-        return "mamang";
+        // dd($validated);
+        $peminjaman = new Peminjaman;
+        
+        $peminjaman->nama = $request->name;
+        $peminjaman->email = $request->email;
+        $peminjaman->tanggal_pinjam = $request->tanggal_pinjam;
+        $peminjaman->tanggal_kembali = $request->tanggal_kembali;
+        
+        $barang_pinjam = $request->barang_pinjam;
+        $hasil = implode(';',$barang_pinjam);
+        $peminjaman->barang_pinjam = $hasil;
+
+        $peminjaman->user_id = $idUser;
+
+        $peminjaman->save();
+
+        return redirect()->route('admin.peminjaman.index');
+        // return "mamang";
     }
 
     /**
