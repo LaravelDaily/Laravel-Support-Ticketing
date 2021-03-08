@@ -94,15 +94,14 @@
 </div>
 
 @endsection
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript">
+<script>
     $(document).ready(function() {
         var max_fields = 10;
         var wrapper = $(".barang");
         var add_button = $(".add_form_field");
-
         var x = 1;
         $(add_button).click(function(e) {
             e.preventDefault();
@@ -113,24 +112,23 @@
                 alert('You Reached the limits')
             }
         });
-
         $(wrapper).on("click", ".delete", function(e) {
             e.preventDefault();
             $(this).parent('div').remove();
             x--;
         })
     });
+</script>
 
+@section('scripts')
+<script>
     Date.prototype.toDateInputValue = (function() {
         var local = new Date(this);
         local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
         return local.toJSON().slice(0,10);
     });
-
     document.getElementById('tanggal_pinjam').value = new Date().toDateInputValue();
-</script>
-@section('scripts')
-<script>
+
     const inputElement = document.querySelector('input[id="photo"]');
     const pond = FilePond.create( inputElement );
 

@@ -40,8 +40,9 @@
                         <th>
                             Admin
                         </th>
+                        
                         <th>
-                            &nbsp;
+                            Aksi
                         </th>
                     </tr>
                 </thead>
@@ -105,7 +106,7 @@
   let deleteButtonTrans = '{{ trans('global.datatables.delete') }}'
   let deleteButton = {
     text: deleteButtonTrans,
-    url: "{{ route('admin.peminjamans.massDestroy') }}",
+    url: "{{ route('admin.peminjaman.massDestroy') }}",
     className: 'btn-danger',
     action: function (e, dt, node, config) {
       var ids = $.map(dt.rows({ selected: true }).nodes(), function (entry) {
