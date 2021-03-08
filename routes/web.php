@@ -59,5 +59,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::resource('audit-logs', 'AuditLogsController', ['except' => ['create', 'store', 'edit', 'update', 'destroy']]);
 
     // Peminjaman 
+    //upload peminjaman
+    Route::post('peminjaman/upload', 'PeminjamanController@upload')->name('peminjaman.upload');
     Route::resource('peminjaman', 'PeminjamanController');
 });

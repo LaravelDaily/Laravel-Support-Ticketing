@@ -118,4 +118,11 @@ class PeminjamanController extends Controller
     {
         //
     }
+
+    public function upload(Request $request)
+    {
+        if($request->hasFile('photo')) {
+            
+        }
+    }
 }

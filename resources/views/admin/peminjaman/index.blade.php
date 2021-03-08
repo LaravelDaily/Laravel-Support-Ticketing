@@ -19,6 +19,9 @@
             <table class=" table table-bordered table-striped table-hover datatable datatable-peminjaman">
                 <thead>
                     <tr>
+                        <th width="10">
+
+                        </th>
                         <th>
                             Nama Peminjam
                         </th>
@@ -46,6 +49,9 @@
                     @foreach($peminjamans as $key => $peminjaman)
                         <tr data-entry-id="{{ $peminjaman->id }}">
                             <td>
+
+                            </td>
+                            <td>
                                 {{ $peminjaman->nama ?? '' }}
                             </td>
                             <td>
@@ -58,7 +64,7 @@
                                 {{ $peminjaman->tanggal_pinjam ?? '' }}
                             </td>
                             <td>
-                                {{ $peminjaman->tanggal_kembali ?? '' }}
+                                {{ $peminjaman->tanggal_kembali ?? 'Belum dikembalikan' }}
                             </td>
                             <td>
                                 {{ $peminjaman->user_id ?? '' }}

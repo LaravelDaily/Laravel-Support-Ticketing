@@ -1,4 +1,7 @@
 @extends('layouts.admin')
+@section('styles')
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
+@endsection
 @section('content')
 
 <div class="card">
@@ -73,6 +76,14 @@
                     {{ trans('cruds.comment.fields.author_email_helper') }}
                 </p>
             </div>
+            <div class="form-group">
+                <label for="photo">{{ trans('Photo') }}</label>
+                <input type="file" id="photo" name="photo" class="form-group">
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>
@@ -81,8 +92,12 @@
 
     </div>
 </div>
+
+@endsection
+<script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         var max_fields = 10;
         var wrapper = $(".barang");
@@ -113,5 +128,14 @@
     });
 
     document.getElementById('tanggal_pinjam').value = new Date().toDateInputValue();
+</script>
+@section('scripts')
+<script>
+    const inputElement = document.querySelector('input[id="photo"]');
+    const pond = FilePond.create( inputElement );
+
+    FilePond.setOptions({
+        server: '/admin/peminjaman/upload'
+    });
 </script>
 @endsection
