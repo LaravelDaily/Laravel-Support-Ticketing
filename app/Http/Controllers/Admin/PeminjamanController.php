@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePeminjamanRequest;
 use App\User;
 use App\Peminjaman;
+use App\Http\Controllers\Admin\KunciController;
 use Gate;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,7 +38,10 @@ class PeminjamanController extends Controller
     public function create()
     {
         //
-        return view ('admin.peminjaman.create');
+        $kunci = new KunciController;
+        $tampung =  $kunci->bikinKunci('ini eek');
+        return $tampung;
+        // return view ('admin.peminjaman.create');
     }
 
     /**
