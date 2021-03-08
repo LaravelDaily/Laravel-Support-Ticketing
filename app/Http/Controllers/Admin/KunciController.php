@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Kunci;
 
 class KunciController extends Controller
 {
@@ -83,8 +84,13 @@ class KunciController extends Controller
         //
     }
 
-    public function bikinKunci($params)
+    public function bikinKunci($idPeminjaman)
     {
-        return $params;
+        $kunci = new Kunci;
+        $key = md5(uniqid(rand(), true));
+
+        $kunci->kunci = $key;
+        $kunci->peminjaman_id = $idPeminjaman;
+        $kunci->save();
     }
 }

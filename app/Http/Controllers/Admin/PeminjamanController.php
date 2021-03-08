@@ -12,6 +12,7 @@ use Gate;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class PeminjamanController extends Controller
 {
     /**
@@ -38,10 +39,9 @@ class PeminjamanController extends Controller
     public function create()
     {
         //
-        $kunci = new KunciController;
-        $tampung =  $kunci->bikinKunci('ini eek');
-        return $tampung;
-        // return view ('admin.peminjaman.create');
+        
+        // return $tampung;
+        return view ('admin.peminjaman.create');
     }
 
     /**
@@ -56,9 +56,9 @@ class PeminjamanController extends Controller
         $idUser = Auth::user()->id;
 
         // //validasi data
-        // $validated = $request->all();
-
-        // dd($validated);
+        $validated = $request->all();
+        $idPeminjaman = Peminjaman::latest()->first()->id +1;
+        // dd($lastId);
         $peminjaman = new Peminjaman;
         
         $peminjaman->nama = $request->name;
@@ -69,10 +69,11 @@ class PeminjamanController extends Controller
         $barang_pinjam = $request->barang_pinjam;
         $hasil = implode(';',$barang_pinjam);
         $peminjaman->barang_pinjam = $hasil;
-
         $peminjaman->user_id = $idUser;
-
         $peminjaman->save();
+        
+        $kunci = new KunciController;
+        $kunci->bikinKunci($idPeminjaman);
 
         return redirect()->route('admin.peminjaman.index');
         // return "mamang";

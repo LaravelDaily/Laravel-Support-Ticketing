@@ -16,7 +16,6 @@ class AddKunciTable extends Migration
         Schema::create('kunci', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kunci');
-            $table->string('pasangan');
             $table->timestamps();
         });
     }
