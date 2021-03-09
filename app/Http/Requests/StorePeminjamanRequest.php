@@ -32,7 +32,7 @@ class StorePeminjamanRequest extends FormRequest
                 'required',
             ],
             'email' => [
-                'required',
+                'required|email',
             ],
             'barang_pinjam' => [
                 'required',

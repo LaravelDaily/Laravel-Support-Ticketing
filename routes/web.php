@@ -63,5 +63,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('peminjaman/upload', 'PeminjamanController@upload')->name('peminjaman.upload');
     //mass destroy
     Route::delete('peminjaman/destroy', 'PeminjamanController@massDestroy')->name('peminjaman.massDestroy');
+    //range report laporan peminjaman
+    Route::get('peminjaman/rangeReport', 'PeminjamanController@rangeReport')->name('peminjaman.rangeReport');
     Route::resource('peminjaman', 'PeminjamanController');
 });

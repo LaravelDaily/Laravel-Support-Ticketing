@@ -16,6 +16,15 @@
 
     <div class="card-body">
         <div class="table-responsive">
+        <!-- FORM UNTUK FILTER BERDASARKAN DATE RANGE -->
+            <form action="{{ route('admin.peminjaman.rangeReport') }}" method="get">
+                <div class="input-group mb-3 col-md-3 float-right">
+                    <input type="text" id="created_at" name="date" class="form-control">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit">Filter</button>
+                    </div>
+                </div>
+            </form>
             <table class=" table table-bordered table-striped table-hover datatable datatable-peminjaman">
                 <thead>
                     <tr>
@@ -99,6 +108,10 @@
 @endsection
 @section('scripts')
 @parent
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 <script>
     $(function () {
   let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
@@ -141,6 +154,16 @@
         $($.fn.dataTable.tables(true)).DataTable()
             .columns.adjust();
     });
+})
+$(document).ready(function() {
+    let start = moment().startOf('month')
+    let end = moment().endOf('month')
+
+    //INISIASI DATERANGEPICKER
+    $('#created_at').daterangepicker({
+        startDate: start,
+        endDate: end
+    })
 })
 
 </script>
