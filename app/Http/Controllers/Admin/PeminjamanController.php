@@ -141,20 +141,27 @@ class PeminjamanController extends Controller
     {
         //INISIASI 30 HARI RANGE SAAT INI JIKA HALAMAN PERTAMA KALI DI-LOAD
         //KITA GUNAKAN STARTOFMONTH UNTUK MENGAMBIL TANGGAL 1
-        $start = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+        $start = Carbon::now()->startOfMonth()->format('Y-m-d');
         //DAN ENDOFMONTH UNTUK MENGAMBIL TANGGAL TERAKHIR DIBULAN YANG BERLAKU SAAT INI
-        $end = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
+        $end = Carbon::now()->endOfMonth()->format('Y-m-d');
 
         //JIKA USER MELAKUKAN FILTER MANUAL, MAKA PARAMETER DATE AKAN TERISI
         if (request()->date != '') {
             //MAKA FORMATTING TANGGALNYA BERDASARKAN FILTER USER
             $date = explode(' - ' ,request()->date);
-            $start = Carbon::parse($date[0])->format('Y-m-d') . ' 00:00:01';
-            $end = Carbon::parse($date[1])->format('Y-m-d') . ' 23:59:59';
+            $start = Carbon::parse($date[0])->format('Y-m-d');
+            $end = Carbon::parse($date[1])->format('Y-m-d');
         }
 
         //BUAT QUERY KE DB MENGGUNAKAN WHEREBETWEEN DARI TANGGAL FILTER
-        $peminjamans = Peminjaman::whereBetween('created_at', [$start, $end])->get();
-        dd($peminjamans[0]);
+        $peminjamans = Peminjaman::whereBetween('tanggal_pinjam', [$start, $end])->get();
+        // dd($peminjamans[0]);
+        return view('admin.peminjaman.index', compact('peminjamans'));
+    }
+
+    public function pengembalian($id)
+    {
+        $validated = Peminjaman::findOrFail($id);
+        dd($validated);
     }
 }

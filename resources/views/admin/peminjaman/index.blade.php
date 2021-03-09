@@ -87,6 +87,12 @@
                                     </a>
                                 @endcan
 
+                                @can('peminjaman_pengembalian')
+                                    <a class="btn btn-xs btn-warning" href="{{ route('admin.peminjaman.pengembalian', $peminjaman->id) }}" style="display: {{ $peminjaman->tanggal_kembali != NULL ? 'none' : '' }}">
+                                        Pengembalian
+                                    </a>
+                                @endcan
+
                                 @can('peminjaman_delete')
                                     <form action="{{ route('admin.peminjaman.destroy', $peminjaman->id) }}" method="POST" onsubmit="return confirm('{{ trans('global.areYouSure') }}');" style="display: inline-block;">
                                         <input type="hidden" name="_method" value="DELETE">
@@ -108,8 +114,9 @@
 @endsection
 @section('scripts')
 @parent
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <script>

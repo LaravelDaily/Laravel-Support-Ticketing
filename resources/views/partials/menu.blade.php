@@ -117,7 +117,7 @@
             @can('peminjaman_access')
                 <li class="nav-item">
                     <a href="{{ route("admin.peminjaman.index") }}" class="nav-link {{ request()->is('admin/peminjaman') || request()->is('admin/peminjaman/*') ? 'active' : '' }}">
-                        <i class="fa-fw fas fa-comment nav-icon">
+                        <i class="fa-fw fas fa-book nav-icon">
 
                         </i>
                         {{ trans('Peminjaman') }}

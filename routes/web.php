@@ -65,5 +65,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('peminjaman/destroy', 'PeminjamanController@massDestroy')->name('peminjaman.massDestroy');
     //range report laporan peminjaman
     Route::get('peminjaman/rangeReport', 'PeminjamanController@rangeReport')->name('peminjaman.rangeReport');
+    //peminjaman pengembalian
+    Route::get('peminjaman/{id}/pengembalian', 'PeminjamanController@pengembalian')->name('peminjaman.pengembalian');
     Route::resource('peminjaman', 'PeminjamanController');
 });
