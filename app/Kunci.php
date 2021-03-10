@@ -14,4 +14,12 @@ class Kunci extends Model
     protected $fillable = [
         'kunci'
     ];
+
+    /**
+     * Get the user that owns the phone.
+     */
+    public function peminjaman()
+    {
+        return $this->belongsTo(Peminjaman::class, 'peminjaman_id');
+    }
 }

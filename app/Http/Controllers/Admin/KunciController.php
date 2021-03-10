@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Kunci;
+use Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class KunciController extends Controller
 {
@@ -16,6 +18,16 @@ class KunciController extends Controller
     public function index()
     {
         //
+        abort_if(Gate::denies('peminjaman_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $kuncis = Kunci::with('peminjaman')->get();
+
+        return view('admin.kunci.index', compact('kuncis'));
+        // foreach ($users as $table2record) {
+        //     // echo $table2record->id; //access table2 data
+        //     echo $table2record->peminjaman->email; //access table1 data
+        // }
+        // dd($users);
+        
     }
 
     /**

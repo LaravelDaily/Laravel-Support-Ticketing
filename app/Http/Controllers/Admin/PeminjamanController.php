@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePeminjamanRequest;
+use App\Http\Requests\UpdatePeminjamanRequest;
 use App\User;
 use App\Peminjaman;
 use App\Http\Controllers\Admin\KunciController;
@@ -114,9 +115,21 @@ class PeminjamanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePeminjamanRequest $request, $id)
     {
-        //
+        $idUser = Auth::user()->id;
+        $peminjaman = Peminjaman::find($id);
+        
+        $peminjaman->nama = $request->nama;
+        $peminjaman->email = $request->email;
+        $peminjaman->barang_pinjam = $request->barang_pinjam;
+        $peminjaman->tanggal_pinjam = $request->tanggal_pinjam;
+        $peminjaman->tanggal_kembali = $request->tanggal_kembali;
+        $peminjaman->user_id = $idUser;
+        
+        $peminjaman->save();
+
+        return redirect()->route('admin.peminjaman.index');
     }
 
     /**
@@ -161,7 +174,15 @@ class PeminjamanController extends Controller
 
     public function pengembalian($id)
     {
-        $validated = Peminjaman::findOrFail($id);
-        dd($validated);
+        abort_if(Gate::denies('peminjaman_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $peminjaman = Peminjaman::findOrFail($id);
+        // dd($validated);
+        return view('admin.peminjaman.pengembalian', compact('peminjaman'));
+    }
+
+    public function pengembalianUpdate(Request $request, $id)
+    {
+        dd($request->all());
     }
 }

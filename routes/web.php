@@ -67,5 +67,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::get('peminjaman/rangeReport', 'PeminjamanController@rangeReport')->name('peminjaman.rangeReport');
     //peminjaman pengembalian
     Route::get('peminjaman/{id}/pengembalian', 'PeminjamanController@pengembalian')->name('peminjaman.pengembalian');
+    //updatePengembalian
+    Route::put('peminjaman/{id}/pengembalian', 'PeminjamanController@pengembalianUpdate')->name('peminjaman.updatePengembalian');
     Route::resource('peminjaman', 'PeminjamanController');
+
+    // Kunci
+    Route::resource('kunci', 'KunciController');
 });

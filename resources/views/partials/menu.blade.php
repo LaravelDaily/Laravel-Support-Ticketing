@@ -114,7 +114,7 @@
                     </a>
                 </li>
             @endcan
-            @can('peminjaman_access')
+            <!-- @can('peminjaman_access')
                 <li class="nav-item">
                     <a href="{{ route("admin.peminjaman.index") }}" class="nav-link {{ request()->is('admin/peminjaman') || request()->is('admin/peminjaman/*') ? 'active' : '' }}">
                         <i class="fa-fw fas fa-book nav-icon">
@@ -122,6 +122,38 @@
                         </i>
                         {{ trans('Peminjaman') }}
                     </a>
+                </li>
+            @endcan -->
+            @can('peminjaman_access')
+                <li class="nav-item nav-dropdown">
+                    <a class="nav-link  nav-dropdown-toggle" href="#">
+                        <i class="fa-fw fas fa-book nav-icon">
+
+                        </i>
+                        Peminjaman
+                    </a>
+                    <ul class="nav-dropdown-items">
+                        @can('peminjaman_access')
+                            <li class="nav-item">
+                                <a href="{{ route("admin.peminjaman.index") }}" class="nav-link {{ request()->is('admin/peminjaman') || request()->is('admin/peminjaman/*') ? 'active' : '' }}">
+                                    <i class="fa-fw fas fa-book nav-icon">
+
+                                    </i>
+                                    Data Peminjaman
+                                </a>
+                            </li>
+                        @endcan
+                        @can('peminjaman_access')
+                            <li class="nav-item">
+                                <a href="{{ route("admin.kunci.index") }}" class="nav-link {{ request()->is('admin/kunci') || request()->is('admin/kunci/*') ? 'active' : '' }}">
+                                    <i class="fa-fw fas fa-key nav-icon">
+
+                                    </i>
+                                    Data Key
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
                 </li>
             @endcan
             <li class="nav-item">
