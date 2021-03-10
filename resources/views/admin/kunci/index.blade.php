@@ -35,6 +35,9 @@
                             Tanggal Peminjaman
                         </th>
                         <th>
+                            Status
+                        </th>
+                        <th>
                             Admin
                         </th>
                     </tr>
@@ -56,6 +59,13 @@
                             </td>
                             <td>
                                 {{ $kunci->peminjaman->tanggal_pinjam ?? '' }}
+                            </td>
+                            <td>
+                            @if ($kunci->status === 1)
+                                Sudah Terpakai
+                            @else
+                                Belum Terpakai
+                            @endif
                             </td>
                             <td>
                                 {{ $kunci->peminjaman->user_id ?? '' }}

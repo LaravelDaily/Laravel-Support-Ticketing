@@ -8,6 +8,7 @@ use App\Http\Requests\StorePeminjamanRequest;
 use App\Http\Requests\UpdatePeminjamanRequest;
 use App\User;
 use App\Peminjaman;
+use App\Kunci;
 use App\Http\Controllers\Admin\KunciController;
 use Gate;
 use Illuminate\Support\Facades\Auth;
@@ -129,7 +130,8 @@ class PeminjamanController extends Controller
         
         $peminjaman->save();
 
-        return redirect()->route('admin.peminjaman.index');
+        // return redirect()->route('admin.peminjaman.index')->withStatus('Your ticket has been submitted, we will be in touch. You can view ticket status');
+        return redirect()->route('admin.peminjaman.index')->with(['success' => 'Edit Data Peminjaman '.$peminjaman->email.' berhasil!']);
     }
 
     /**
@@ -183,6 +185,19 @@ class PeminjamanController extends Controller
 
     public function pengembalianUpdate(Request $request, $id)
     {
+        // dd($id);
+        $peminjaman = Peminjaman::findOrFail($id);
+        $kunci = Kunci::where('peminjaman_id', $id)->first();
+        // dd($kunci->kunci);
+        if($request->key == $kunci->kunci)
+        {
+            $peminjaman->tanggal_kembali = $request->tanggal_kembali;
+            $peminjaman->save();
+
+            return redirect()->route('admin.peminjaman.index')->with(['success' => 'Pengembalian '.$peminjaman->email.' berhasil!']);
+        } else {
+            return redirect()->route('admin.peminjaman.index')->with(['error' => 'Pengembalian '.$peminjaman->email.' tidak berhasil. Kunci Salah!']);
+        }
         dd($request->all());
     }
 }
