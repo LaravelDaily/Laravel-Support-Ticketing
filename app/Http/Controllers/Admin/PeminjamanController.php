@@ -60,7 +60,6 @@ class PeminjamanController extends Controller
 
         // //validasi data
         $validated = $request->all();
-        $idPeminjaman = Peminjaman::latest()->first()->id +1;
         // dd($lastId);
         $peminjaman = new Peminjaman;
         
@@ -73,12 +72,16 @@ class PeminjamanController extends Controller
         $hasil = implode(';',$barang_pinjam);
         $peminjaman->barang_pinjam = $hasil;
         $peminjaman->user_id = $idUser;
-        $peminjaman->save();
-        
-        $kunci = new KunciController;
-        $kunci->bikinKunci($idPeminjaman);
 
-        return redirect()->route('admin.peminjaman.index');
+        if($peminjaman->save()) {
+            $kunci = new KunciController;
+            $kunci->bikinKunci(Peminjaman::latest()->first()->id);
+            return redirect()->route('admin.peminjaman.index')->with(['success' => 'Tambah Data Peminjaman '.$peminjaman->email.' berhasil!']);
+        } else {
+            return redirect()->route('admin.peminjaman.index')->with(['error' => 'Tambah Data Peminjaman Error']);
+        }
+
+        
         // return "mamang";
     }
 
@@ -143,6 +146,13 @@ class PeminjamanController extends Controller
     public function destroy($id)
     {
         //
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        if($peminjaman->delete()) {
+            return redirect()->route('admin.peminjaman.index')->with(['success' => 'Hapus Data Peminjaman berhasil!']);
+        } else {
+            return redirect()->route('admin.peminjaman.index')->with(['error' => 'Hapus Data Peminjaman error!']);
+        }
     }
 
     public function upload(Request $request)
@@ -192,9 +202,17 @@ class PeminjamanController extends Controller
         if($request->key == $kunci->kunci)
         {
             $peminjaman->tanggal_kembali = $request->tanggal_kembali;
-            $peminjaman->save();
+            if($peminjaman->save())
+            {
+                //update kunci
+                $updateKunci = Kunci::where('kunci', $request->key)->first();
+                $updateKunci->status = 1;
 
-            return redirect()->route('admin.peminjaman.index')->with(['success' => 'Pengembalian '.$peminjaman->email.' berhasil!']);
+                if($updateKunci->save())
+                {
+                    return redirect()->route('admin.peminjaman.index')->with(['success' => 'Pengembalian '.$peminjaman->email.' berhasil!']);
+                }
+            }
         } else {
             return redirect()->route('admin.peminjaman.index')->with(['error' => 'Pengembalian '.$peminjaman->email.' tidak berhasil. Kunci Salah!']);
         }

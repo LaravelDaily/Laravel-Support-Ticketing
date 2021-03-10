@@ -64,7 +64,7 @@
                     {{ trans('cruds.comment.fields.author_email_helper') }}
                 </p>
             </div>
-            <div class="form-group {{ $errors->has('tanggal_kembali') ? 'has-error' : '' }}">
+            <!-- <div class="form-group {{ $errors->has('tanggal_kembali') ? 'has-error' : '' }}">
                 <label for="tanggal_kembali">{{ trans('Tanggal Kembali') }}*</label>
                 <input type="date" id="tanggal_kembali" name="tanggal_kembali" class="form-control" value="{{ old('tanggal_kembali', isset($peminjaman) ? $peminjaman->tanggal_kembali : '') }}">
                 @if($errors->has('tanggal_kembali'))
@@ -75,7 +75,7 @@
                 <p class="helper-block">
                     {{ trans('cruds.comment.fields.author_email_helper') }}
                 </p>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="photo">{{ trans('Photo') }}</label>
                 <input type="file" id="photo" name="photo" class="form-group">

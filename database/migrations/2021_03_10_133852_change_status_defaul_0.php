@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RelationshipKunciAndPeminjaman extends Migration
+class ChangeStatusDefaul0 extends Migration
 {
     /**
      * Run the migrations.
@@ -15,9 +15,7 @@ class RelationshipKunciAndPeminjaman extends Migration
     {
         Schema::table('kunci', function (Blueprint $table) {
             //
-            $table->unsignedBigInteger('peminjaman_id')->nullable();
-
-            $table->foreign('peminjaman_id')->references('id')->on('peminjaman')->onDelete('cascade');
+            $table->smallinteger('status')->default(0)->change();
         });
     }
 
