@@ -1,0 +1,117 @@
+version: "3.8"
+services:
+  nginx:
+    image: yfix/nginx
+    restart: always
+    ports:
+      - "127.0.0.1:1080:80"
+      - "127.0.0.1:1043:443"
+    links:
+      - php
+      - redis
+      - adminer
+      - mailhog
+    depends_on:
+      - php
+    volumes:
+      - ./:/var/www/:cached
+      - ./docker/etc/nginx:/etc/nginx
+      - ./docker/var/log/nginx:/var/log/nginx:cached
+      - ./docker/var/log/supervisor:/var/log/supervisor:cached
+    healthcheck:
+      test: ["CMD-SHELL", "(curl -sL localhost:80) > /dev/null"]
+      interval: 5s
+      timeout: 1s
+      retries: 2
+      start_period: 1s
+    
+  php:
+    image: yfix/php:7.4
+    restart: always
+    links:
+      - mysql
+      - redis
+      - mailhog
+    depends_on:
+      - mysql
+      - redis
+      - mailhog
+    volumes:
+      - ./:/var/www/:cached
+      - ./docker/etc/php/cli/php.ini:/etc/php/cli/php.ini
+      - ./docker/etc/php/fpm/php.ini:/etc/php/fpm/php.ini
+      - ./docker/etc/php/fpm/php-fpm.conf:/etc/php/fpm/php-fpm.conf
+      - ./docker/etc/php/fpm/pool.d/www.conf:/etc/php/fpm/pool.d/www.conf
+      - ./docker/etc/cron.d/:/etc/cron.d/
+      - ./docker/etc/supervisor/conf.d/:/etc/supervisor/conf.d/
+      - ./docker/var/log/php:/var/log/php:cached
+      - ./docker/var/log/supervisor:/var/log/supervisor:cached
+    healthcheck:
+      test: ["CMD-SHELL", "supervisorctl status php-fpm | grep -i RUNNING || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 5s
+  
+  mysql:
+    image: yfix/mysql:5.7
+    restart: always
+    # Use this only for development, as there are tons of other not used here env vars
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./docker/var/lib/mysql:/var/lib/mysql:cached
+    healthcheck:
+      test: ["CMD-SHELL", "/etc/init.d/mysql status | grep -i running || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 2
+      start_period: 5s
+
+  redis:
+    image: yfix/redis
+    restart: always
+    ports:
+      - "27779:6379"
+    volumes:
+      - ./docker/redis-data:/data:cached
+      - ./docker/etc/redis/redis.conf:/etc/redis/redis.conf
+      - ./docker/var/log/redis:/var/log/redis
+    command: ["redis-server", "/etc/redis/redis.conf"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 1s
+      retries: 3
+
+  adminer:
+    image: yfix/adminer
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8080"]
+      interval: 5s
+      timeout: 1s
+      retries: 2
+      start_period: 1s
+  
+  mailhog:
+    image: mailhog/mailhog
+    volumes:
+      - ./docker/mail-data:/maildir:cached
+    command: ["-storage=maildir", "-maildir-path=/maildir"]
+    logging:
+      driver: 'none'
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 1025"]
+      interval: 2s
+      timeout: 2s
+      retries: 2
+      start_period: 1s
