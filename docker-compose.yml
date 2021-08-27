@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   nginx:
-    image: yfix/nginx:1.19
+    image: yfix/nginx:1.18
     restart: always
     ports:
       - "80:80"
