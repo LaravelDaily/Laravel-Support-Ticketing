@@ -1,11 +1,13 @@
 version: "3.8"
 services:
   nginx:
-    image: yfix/nginx
+    image: yfix/nginx:1.19
     restart: always
     ports:
-      - "127.0.0.1:1080:80"
-      - "127.0.0.1:1043:443"
+      - "80:80"
+      - "443:443"
+#      - "127.0.0.1:1080:80"
+#      - "127.0.0.1:1043:443"
     links:
       - php
       - redis
@@ -26,7 +28,7 @@ services:
       start_period: 1s
     
   php:
-    image: yfix/php:7.4
+    image: yfix/php:7.2
     restart: always
     links:
       - mysql
