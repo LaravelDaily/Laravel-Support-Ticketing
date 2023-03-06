@@ -30,7 +30,7 @@ Project is partly generated with [QuickAdminPanel](https://2019.quickadminpanel.
 
 ## How to use
 
-Amiket javítani kellett:
+Things to fix:
 - sudo apt-get install php7.4-mbstring
 - sudo apt-get install php7.4-xml
 - sudo apt-get install php7.4-xmlwriter
@@ -44,10 +44,10 @@ Amiket javítani kellett:
 - sudo mv composer.phar /usr/local/bin/composer
 - reboot
 ----------------------------------------------------------
-- docker-compose fileba a DB user nem lehet rootű
-- a redis container nem fért hozzá a ./docker/etc/redis/redis.conf-hoz >>>> sudo chmod -R 777 ./docker/etc/redis/
-- Béna, de hardcode-olnom kelett a mysql container IP címét :)
-- Nginx containeren belül a /var/www-t át kellet adni a www-data usernek
+- docker-compose > the DB user probably can't be root?
+- The redis container couldn't access ./docker/etc/redis/redis.conf-hoz >>>> sudo chmod -R 777 ./docker/etc/redis/
+- It's akward, but I had to hard-code the mysql container IP address.... :)
+- In the Nginx container I have to hand over /var/www to user: www-data 
 
 
 - Clone the repository with __git clone__
