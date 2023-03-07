@@ -30,6 +30,26 @@ Project is partly generated with [QuickAdminPanel](https://2019.quickadminpanel.
 
 ## How to use
 
+Things to fix:
+- sudo apt-get install php7.4-mbstring
+- sudo apt-get install php7.4-xml
+- sudo apt-get install php7.4-xmlwriter
+- wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
+- composer update
+- php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+- php -r "if (hash_file('sha384', 'composer-setup.php') === '55ce33d7678c5a611085589f1f3ddf8b3c52d662cd01d4ba75c0ee0459970c2200a51f492d557530c71c15d8dba01eae') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+- php composer-setup.php
+- php -r "unlink('composer-setup.php');"
+- composer update
+- sudo mv composer.phar /usr/local/bin/composer
+- reboot
+----------------------------------------------------------
+- docker-compose > the DB user probably can't be root?
+- The redis container couldn't access ./docker/etc/redis/redis.conf-hoz >>>> sudo chmod -R 777 ./docker/etc/redis/
+- It's akward, but I had to hard-code the mysql container IP address.... :)
+- In the Nginx container I have to hand over /var/www to user: www-data 
+
+
 - Clone the repository with __git clone__
 - Copy __.env.example__ file to __.env__ and edit database credentials there
 - Run __composer install__
